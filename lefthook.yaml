@@ -1,0 +1,6 @@
+pre-commit:
+  parallel: true
+  commands:
+    rust-formatter:
+      glob: "**/*.rs"
+      run: rustfmt {staged_files} --edition=2021
