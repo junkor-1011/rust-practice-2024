@@ -1,6 +1,6 @@
 use std::{
     fmt::Display,
-    ops::{Add, Sub},
+    ops::{Add, Mul, Sub},
 };
 
 use num_traits::Float;
@@ -59,6 +59,37 @@ impl<F: Float> Vector2D<F> {
 impl<F: Float + Display> Display for Vector2D<F> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+impl<F: Float> Mul<F> for Vector2D<F> {
+    type Output = Self;
+
+    fn mul(self, rhs: F) -> Self::Output {
+        Self {
+            x: self.x * rhs,
+            y: self.y * rhs,
+        }
+    }
+}
+
+impl Mul<Vector2D<f32>> for f32 {
+    type Output = Vector2D<f32>;
+    fn mul(self, rhs: Vector2D<f32>) -> Self::Output {
+        Vector2D {
+            x: rhs.x * self,
+            y: rhs.y * self,
+        }
+    }
+}
+
+impl Mul<Vector2D<f64>> for f64 {
+    type Output = Vector2D<f64>;
+    fn mul(self, rhs: Vector2D<f64>) -> Self::Output {
+        Vector2D {
+            x: rhs.x * self,
+            y: rhs.y * self,
+        }
     }
 }
 
@@ -131,5 +162,14 @@ mod test {
 
         assert_eq!(v.scale(2.), Vector2D::new(3., -4.),);
         assert_eq!(v.scale(-1.), Vector2D::new(-1.5, 2.),);
+
+        assert_eq!(v.scale(2.), 2. * v);
+        assert_eq!(v.scale(2.), v * 2.);
+
+        let w = Vector2D::<f32>::new(-12.5, 6.0);
+
+        assert_eq!(w.scale(-3.), Vector2D::<f32>::new(37.5, -18.0));
+        assert_eq!(w.scale(-3.), w * -3.);
+        assert_eq!(w.scale(-3.), -3. * w);
     }
 }
