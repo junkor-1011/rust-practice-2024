@@ -20,6 +20,12 @@ impl<F: Float> CartesianCoordinatesVector<F> for Vector2D<F> {
     fn norm_sqr(&self) -> F {
         self.x.powi(2) + self.y.powi(2)
     }
+    fn scale(&self, t: F) -> Self {
+        Self {
+            x: self.x * t,
+            y: self.y * t,
+        }
+    }
 }
 
 impl<F: Float> Add for Vector2D<F> {
@@ -117,5 +123,13 @@ mod test {
 
         let x = Vector2D::new(-1.5, 1.);
         assert_eq!(x.norm_sqr(), 3.25);
+    }
+
+    #[test]
+    fn check_scale() {
+        let v = Vector2D::new(1.5, -2.);
+
+        assert_eq!(v.scale(2.), Vector2D::new(3., -4.),);
+        assert_eq!(v.scale(-1.), Vector2D::new(-1.5, 2.),);
     }
 }
